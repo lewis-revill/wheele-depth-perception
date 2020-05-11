@@ -1,5 +1,5 @@
 set(RUN_WDP_SOURCES
-  run-wdp.cpp
+  wdp-app.cpp
   )
 
 set(Boost_USE_STATIC_LIBS ON)
@@ -12,16 +12,16 @@ endif()
 find_package(Boost 1.65.0 REQUIRED)
 find_package(JPEG 8 REQUIRED)
 
-add_executable(run-wdp ${RUN_WDP_SOURCES})
+add_executable(wdp-app ${RUN_WDP_SOURCES})
 
-target_include_directories(run-wdp PUBLIC
+target_include_directories(wdp-app PUBLIC
   ${PROJECT_BINARY_DIR}
   ${WDP_INCLUDE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${JPEG_INCLUDE_DIRS}
   )
 
-target_link_libraries(run-wdp PUBLIC
+target_link_libraries(wdp-app PUBLIC
   WDP
   ${Boost_LIBRARIES}
   ${JPEG_LIBRARIES}

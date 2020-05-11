@@ -1,1 +1,1 @@
-add_subdirectory(run-wdp)
+add_subdirectory(wdp-app)
