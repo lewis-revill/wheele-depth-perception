@@ -2,11 +2,15 @@
 
 #### Background
 
-Depth perception is a task required for the obstacle perception subsystem of the WHEEL.E autonomous wheelchair. This task was intended to be performed using the Intel Realsense D435 depth camera through the librealsense SDK. To meet the needs of the test specification for the subsystem and to provide training data for any machine learning components of the subsystem - if applicable - the camera would be used to generate raw input data for which the behaviour of the subsystem is known. However, due to restrictions imposed on obtaining and prototyping with physical components, this camera could not be sourced. In its place, this project simulates a depth camera by performing stereo depth perception on pairs of images, the results of which can be used as originally intended by the obstacle perception subsystem.
+Depth perception is a task required for the obstacle perception subsystem of the WHEEL.E autonomous wheelchair. This task was originally intended to be performed using the Intel Realsense D435 depth camera through the librealsense SDK.
+
+To meet the needs of the test specification for the subsystem and to provide training data for any machine learning component of the subsystem - if applicable - the camera would be used to generate raw input data for which the behaviour of the subsystem is known. However, due to restrictions imposed on obtaining and prototyping with physical components, this camera could not be sourced.
+
+In its place, this project simulates a depth camera by performing stereo depth perception on pairs of images, the results of which can be used as originally intended by the obstacle perception subsystem.
 
 #### Specification
 
-To perform its function correctly, the following inputs are required:
+The following inputs are required:
 
 - Two RGB images.
 
@@ -24,20 +28,22 @@ The scale of the depth will be dynamically determined from the maximum depth rec
 
 #### Design
 
-The algorithm for this task is based on the concept of binocular parallax, which describes the shift in perspective on an object when comparing the 2D scene as viewed from two viewpoints. By relating this shift in perspective to the distance between the two viewpoints, the distance to the object can be estimated.
+The algorithm for this task is based on the concept of binocular parallax, which describes the shift in perspective on an object when comparing the 2D scene as viewed from two viewpoints. By relating this shift in perspective to the distance between the two viewpoints, the depth of the object can be estimated.
 
-What this implies for an algorithm is that to determine depth for a scene, first the pixels in one image must be correlated with the other, to find out the motion of that 'object' between the two. Ideally every single pixel can be correlated with it's corresponding location in the second image, but in reality one pixel value may occur in multiple locations in the second image. So it is best to attempt to match 'neighbourhoods' around each pixel using a block search algorithm such as those used in video compression for motion detection between frames. The search space can be minimized since - for parallel cameras - the location of an object in one image will always shift in the same horizontal direction when seen in the other.
+What this implies for an algorithm is that to determine depth for a scene, first the pixels in one image must be correlated with the other, to find out the motion of that 'object' between the two.
+
+To determine matching pixels in both images the 'neighbourhood' of pixels surrounding a given pixel can be determined, and the best match within the second image can be found using a block search algorithm - such as those used in video compression for motion estimation.
+
+The displacement between the original location of a pixel and its location in the second image can be used along with the distance between the cameras to triangulate the depth of that pixel.
 
 Once depth information has been produced for pixels, this is written as a single channel image to be used as an input to collision detection algorithms.
 
 #### Implementation
 
-This project is implemented as a library with two main modules 'Search' and 'Depth'. The 'Search' module implements functionality required to find matching neighbourhoods, while the 'Depth' module calculates depth information from the offsets as determined by the 'Search' module.
+This project is implemented as a library with two main modules: 'Search' and 'Depth'. Headers are found in 'include/wdp' and sources in 'lib/'.
 
-Library headers are found in 'include/wdp/', and sources in 'lib/'.
+Functionality required to find matching neighbourhoods can be found in the 'Search' module, while the functionality to calculate depth information from the displacement of pixels can be found in the 'Depth' module.
 
-This project utilizes the Boost library, providing required functionality for operating with images as well as additional standard-library-style functionality.
+This project utilizes the Boost library, providing additional standard-library-style functionality, primarily the ability to load and operate on images.
 
 #### Testing
-
-Two styles of testing will be used - unit testing and black box testing. Unit testing is implemented in the form of a single executable which runs all tests which have been written individually for each unit (IE function/method etc.). This is found in 'unittest/'. The black box testing approach takes the form of running the program over a set of input combinations for which the output is known. This is found in 'test/'.
