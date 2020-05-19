@@ -10,21 +10,31 @@ In its place, this project simulates a depth camera by performing stereo depth p
 
 #### Specification
 
-The following inputs are required:
+This project enables determining the depth of a pixel in metres away from the camera. For this purpose the following inputs are required:
 
-- Two RGB images.
+- Two RGB images
 
-These images should ideally be taken by cameras aligned parallel to each other on the horizontal axis. So long as there is no movement in the frame, using two images taken from the same camera should suffice.
+- The coordinates of the pixel for which the depth should be determined
 
-- The distance between each camera.
-
-This distance is used within the depth perception algorithm to triangulate depth and should be as accurate as possible. On the Intel Realsense camera this distance is approximately 53mm.
+- The distance between each camera
 
 The following outputs are expected:
 
-- A Grayscale image where pixel values represent the depth of pixels in the first image.
+- The depth in metres of the pixel at the given coordinates in the first image
 
-The scale of the depth will be dynamically determined from the maximum depth recognisable with the given distance between each camera.
+When used as a library, further configuration is possible whereby the following values can be adjusted:
+
+- The focal length of the camera
+
+- The scale of an individual pixel
+
+- The radii of the neighbourhood used in the search algorithm
+
+- The offset at which to start the search for a matching neighbourhood
+
+- The radii of the search space
+
+- The maximum value of sum of squared differences for which two neighbourhoods can be considered similar
 
 #### Design
 
@@ -40,7 +50,7 @@ Once depth information has been produced for pixels, this is written as a single
 
 #### Implementation
 
-This project is implemented as a library with two main modules: 'Search' and 'Depth'. Headers are found in 'include/wdp' and sources in 'lib/'.
+This project is implemented as a library with two main modules: 'Search' and 'Depth'. Headers are found in 'include/wdp' and sources in 'lib/'. Currently the library is a header-only implementation.
 
 Functionality required to find matching neighbourhoods can be found in the 'Search' module, while the functionality to calculate depth information from the displacement of pixels can be found in the 'Depth' module.
 
