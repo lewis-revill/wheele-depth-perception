@@ -31,7 +31,7 @@ endif()
 set(WDP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(WDP_DATA_DIR ${CMAKE_SOURCE_DIR}/data)
 
-add_subdirectory(lib)
+# add_subdirectory(lib)
 add_subdirectory(tools)
 
 configure_file(WDPConfig.h.in WDPConfig.h)

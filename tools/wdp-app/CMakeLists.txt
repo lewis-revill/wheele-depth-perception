@@ -22,7 +22,6 @@ target_include_directories(wdp-app PUBLIC
   )
 
 target_link_libraries(wdp-app PUBLIC
-  WDP
   ${Boost_LIBRARIES}
   ${JPEG_LIBRARIES}
   )
