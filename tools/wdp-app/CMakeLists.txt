@@ -1,4 +1,4 @@
-set(RUN_WDP_SOURCES
+set(WDP_APP_SOURCES
   wdp-app.cpp
   )
 
@@ -12,7 +12,7 @@ endif()
 find_package(Boost 1.65.0 COMPONENTS program_options REQUIRED)
 find_package(JPEG 8 REQUIRED)
 
-add_executable(wdp-app ${RUN_WDP_SOURCES})
+add_executable(wdp-app ${WDP_APP_SOURCES})
 
 target_include_directories(wdp-app PUBLIC
   ${PROJECT_BINARY_DIR}
