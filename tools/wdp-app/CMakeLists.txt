@@ -9,7 +9,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
   set(Boost_USE_DEBUG_RUNTIME ON)
 endif()
 
-find_package(Boost 1.65.0 REQUIRED)
+find_package(Boost 1.65.0 COMPONENTS program_options REQUIRED)
 find_package(JPEG 8 REQUIRED)
 
 add_executable(wdp-app ${RUN_WDP_SOURCES})
