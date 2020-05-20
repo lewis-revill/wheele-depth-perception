@@ -21,6 +21,8 @@
 #include "Definitions.h"
 #include "Search.h"
 
+#include <cmath>
+
 namespace wdp {
 
 struct DepthParameters {
@@ -28,6 +30,14 @@ struct DepthParameters {
   double PixelScale;
   double CameraDisplacement;
 };
+
+template <typename Image>
+Offset getCentreOffset(const Image &Img, Coordinates C) {
+  // Input argument must be a 2D image.
+  boost::function_requires<boost::gil::RandomAccess2DImageConcept<Image>>();
+
+  return Offset(C.x - Img.width() / 2, C.y - Img.height() / 2);
+}
 
 template <typename LHSImage, typename RHSImage>
 double getDepth(const LHSImage &LHSImg, const RHSImage &RHSImg, Coordinates C,
@@ -37,11 +47,16 @@ double getDepth(const LHSImage &LHSImg, const RHSImage &RHSImg, Coordinates C,
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<LHSImage>>();
   boost::function_requires<boost::gil::RandomAccess2DImageConcept<RHSImage>>();
 
-  const Offset O = getOffset(LHSImg, RHSImg, C, SearchParams);
+  const Offset CentreOffset = getCentreOffset(LHSImg, C);
+  double TrueXCentreOffset = CentreOffset.x * DepthParams.PixelScale;
+  double Hypotenuse = sqrt(DepthParams.FocalLength * DepthParams.FocalLength +
+                           TrueXCentreOffset * TrueXCentreOffset);
 
+  const Offset O = getOffset(LHSImg, RHSImg, C, SearchParams);
   double TrueXOffset = -O.x * DepthParams.PixelScale;
-  return DepthParams.FocalLength *
-         (DepthParams.CameraDisplacement / TrueXOffset);
+  double ScaleFactor = DepthParams.CameraDisplacement / TrueXOffset;
+
+  return ScaleFactor * Hypotenuse;
 }
 
 } // namespace wdp
