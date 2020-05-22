@@ -62,9 +62,9 @@ int main(int argc, char **argv) {
   }
 
   std::string LHSFilename =
-      std::string(XSTR(WDP_DATA_DIR)).append(ImageDir).append("/lhs.jpg");
+      std::string(XSTR(WDP_DATA_DIR) "/").append(ImageDir).append("/lhs.jpg");
   std::string RHSFilename =
-      std::string(XSTR(WDP_DATA_DIR)).append(ImageDir).append("/rhs.jpg");
+      std::string(XSTR(WDP_DATA_DIR) "/").append(ImageDir).append("/rhs.jpg");
   bg::rgb8_image_t LHSImg;
   bg::rgb8_image_t RHSImg;
   bg::jpeg_read_image(LHSFilename, LHSImg);
@@ -72,14 +72,14 @@ int main(int argc, char **argv) {
 
   wdp::Coordinates C(X, Y);
 
-  wdp::Radii NeighbourhoodRadii(25, 25);
-  wdp::Offset SearchOffset(-20, 0);
-  wdp::Radii SearchRadii(1000, 1000);
+  wdp::Radii NeighbourhoodRadii(15, 15);
+  wdp::Offset SearchOffset(-250, 0);
+  wdp::Radii SearchRadii(500, 250);
 
   wdp::SearchParameters SearchParams = {NeighbourhoodRadii, SearchOffset,
-                                        SearchRadii, 25000UL};
+                                        SearchRadii, 1000000UL};
 
-  wdp::DepthParameters DepthParams = {125.0, 0.05, CameraDisplacement};
+  wdp::DepthParameters DepthParams = {24.0, 0.00694, CameraDisplacement};
 
   auto Depth = wdp::getDepth(LHSImg, RHSImg, C, SearchParams, DepthParams);
 
