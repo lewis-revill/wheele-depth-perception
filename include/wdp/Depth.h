@@ -18,7 +18,7 @@
 #ifndef WDP_DEPTH_H
 #define WDP_DEPTH_H
 
-#include "Definitions.h"
+#include "Coordinates.h"
 #include "Search.h"
 
 #include <cmath>
@@ -30,14 +30,6 @@ struct DepthParameters {
   double PixelScale;
   double CameraDisplacement;
 };
-
-template <typename Image>
-Offset getCentreOffset(const Image &Img, Coordinates C) {
-  // Input argument must be a 2D image.
-  boost::function_requires<boost::gil::RandomAccess2DImageConcept<Image>>();
-
-  return Offset(C.x - Img.width() / 2, C.y - Img.height() / 2);
-}
 
 template <typename LHSImage, typename RHSImage>
 double getDepth(const LHSImage &LHSImg, const RHSImage &RHSImg, Coordinates C,

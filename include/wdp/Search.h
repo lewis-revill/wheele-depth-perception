@@ -17,7 +17,7 @@
 #ifndef WDP_SEARCH_H
 #define WDP_SEARCH_H
 
-#include "Definitions.h"
+#include "Coordinates.h"
 
 #include <boost/concept_check.hpp>
 #include <boost/gil/image.hpp>
