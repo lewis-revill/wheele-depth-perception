@@ -30,6 +30,7 @@ endif()
 
 set(WDP_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(WDP_DATA_DIR ${CMAKE_SOURCE_DIR}/data)
+set(WDP_TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 
 # add_subdirectory(lib)
 add_subdirectory(tools)
